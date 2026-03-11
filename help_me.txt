@@ -1,0 +1,30 @@
+# Ukraine Power Grid Lab: Attack Path Guide
+
+### Step 1: Initial Access (IT Workstation)
+The attacker starts by compromising a vulnerable employee machine in the corporate network.
+- Vulnerability: Weak, hardcoded SSH credentials (employee:password123).
+- Action: Connect to the it_workstation container from your host machine.
+  ssh -p 2222 employee@localhost
+  Password: password123
+
+### Step 2: Lateral Movement (Firewall to DMZ)
+The firewall acts as a reverse proxy, bridging the corporate network to the hmi_server in the DMZ.
+- Action: Verify access to the HMI through the firewall.
+  From inside the it_workstation shell: curl -i http://firewall:80
+
+### Step 3: Exploitation (HMI Server)
+The Human Machine Interface (HMI) controls the grid but has authentication bypass vulnerabilities.
+- Vulnerability A (Weak Credentials): admin:admin123
+- Vulnerability B (SQL Injection): Username ' OR 1=1
+- Action: Log in to receive an authenticated session and access the /dashboard.
+
+### Step 4: Impact (SCADA Server & PLC Device)
+Authenticated HMI dashboard actions forward commands to the SCADA server (Modbus Master) and then to the PLC (Modbus Slave).
+- Attack 1 - Power Blackout: Trigger "Disconnect Power" (/action/turn_off). Writes 0 to the PLC.
+- Attack 2 - System Destruction: Trigger "Wipe SCADA Firmware" (/action/wipe). Writes 999 to the PLC.
+
+---
+**Grid Status Codes:**
+- 1: ONLINE
+- 0: OFFLINE - BLACKOUT
+- 999: CORRUPTED - UNRECOVERABLE

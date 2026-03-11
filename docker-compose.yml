@@ -1,17 +1,49 @@
 version: '3.8'
+
 services:
   it_workstation:
     build: ./it_workstation
     ports:
-      - "2222:22"
+      - '2222:22'
     networks:
       - corporate_net
+    hostname: it-workstation
+
+  firewall:
+    build: ./firewall
+    networks:
+      - corporate_net
+      - dmz_net
+    hostname: firewall
+    ports:
+      - '8080:80'
+
+  hmi_server:
+    build: ./hmi_server
+    networks:
+      - dmz_net
       - ot_net
+    hostname: hmi-server
+    depends_on:
+      - scada_server
+
   scada_server:
     build: ./scada_server
     networks:
       - ot_net
+    hostname: scada-server
+    depends_on:
+      - plc_device
+
+  plc_device:
+    build: ./plc_device
+    networks:
+      - ot_net
+    hostname: plc-device
+
 networks:
   corporate_net:
+  dmz_net:
+    internal: true
   ot_net:
     internal: true

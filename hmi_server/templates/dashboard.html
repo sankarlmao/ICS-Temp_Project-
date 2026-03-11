@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head><title>HMI Dashboard</title></head>
+<body>
+    <h2>Power Grid Control Panel</h2>
+    <h3>Current Grid Status: <span style="color:{% if status == 'ONLINE' %}green{% else %}red{% endif %}">{{ status }}</span></h3>
+    <hr>
+    <h4>Emergency Controls:</h4>
+    <a href="/action/turn_off"><button style="background-color:orange">Disconnect Power</button></a>
+    <a href="/action/wipe"><button style="background-color:red">Wipe SCADA Firmware</button></a>
+    <br><br><a href="/">Logout</a>
+</body>
+</html>

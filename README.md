@@ -1,4 +1,4 @@
-# Ukraine Power Grid Attack - Lab
+# Power Grid Attack - Lab
 
 This lab simulates a complex, realistic attack on an Operational Technology (OT) network, inspired by the Ukraine Power Grid attack.
 

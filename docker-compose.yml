@@ -1,49 +1,42 @@
-version: '3.8'
-
 services:
-  it_workstation:
-    build: ./it_workstation
-    ports:
-      - '2222:22'
+  it-workstation:
+    build: ./it-workstation
+    container_name: it-workstation
     networks:
-      - corporate_net
-    hostname: it-workstation
+      - it-net
 
-  firewall:
-    build: ./firewall
+  dmz-webserver:
+    build: ./dmz-webserver
+    container_name: dmz-webserver
     networks:
-      - corporate_net
-      - dmz_net
-    hostname: firewall
-    ports:
-      - '8080:80'
+      - it-net
+      - dmz-net
 
-  hmi_server:
-    build: ./hmi_server
+  scada-server:
+    build: ./scada-server
+    container_name: scada-server
     networks:
-      - dmz_net
-      - ot_net
-    hostname: hmi-server
-    depends_on:
-      - scada_server
+      - dmz-net
+      - ot-net
 
-  scada_server:
-    build: ./scada_server
+  hmi-client:
+    build: ./hmi-client
+    container_name: hmi-client
     networks:
-      - ot_net
-    hostname: scada-server
-    depends_on:
-      - plc_device
+      - ot-net
 
-  plc_device:
-    build: ./plc_device
+  logger:
+    build: ./logger
+    container_name: logger
     networks:
-      - ot_net
-    hostname: plc-device
+      - it-net
+      - dmz-net
+      - ot-net
 
 networks:
-  corporate_net:
-  dmz_net:
-    internal: true
-  ot_net:
-    internal: true
+  it-net:
+    driver: bridge
+  dmz-net:
+    driver: bridge
+  ot-net:
+    driver: bridge

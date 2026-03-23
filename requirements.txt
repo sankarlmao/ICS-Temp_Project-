@@ -1,0 +1,8 @@
+# ICS Power Grid Simulator — Dependencies
+# No external dependencies required!
+# All modules use Python 3 standard library only.
+#
+# Optional (for enhanced terminal output):
+# pip install colorama     # Cross-platform ANSI colors
+# pip install pyfiglet     # ASCII art text
+# pip install tabulate     # Table formatting
